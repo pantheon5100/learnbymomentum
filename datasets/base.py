@@ -12,11 +12,12 @@ class BaseDataset(metaclass=ABCMeta):
     """
 
     def __init__(
-        self, bs_train, aug_cfg, num_workers, bs_clf=1000, bs_test=1000,
+        self, bs_train, aug_cfg, num_workers, bs_clf=1000, bs_test=1000, dataset_dir="./"
     ):
         self.aug_cfg = aug_cfg
         self.bs_train, self.bs_clf, self.bs_test = bs_train, bs_clf, bs_test
         self.num_workers = num_workers
+        self.dataset_dir = dataset_dir
 
     @abstractmethod
     def ds_train(self):
@@ -38,7 +39,7 @@ class BaseDataset(metaclass=ABCMeta):
             batch_size=self.bs_train,
             shuffle=True,
             num_workers=self.num_workers,
-            pin_memory=True,
+            pin_memory=False,
             drop_last=True,
         )
 
@@ -50,7 +51,7 @@ class BaseDataset(metaclass=ABCMeta):
             batch_size=self.bs_clf,
             shuffle=True,
             num_workers=self.num_workers,
-            pin_memory=True,
+            pin_memory=False,
             drop_last=True,
         )
 
@@ -62,6 +63,6 @@ class BaseDataset(metaclass=ABCMeta):
             batch_size=self.bs_test,
             shuffle=False,
             num_workers=self.num_workers,
-            pin_memory=True,
+            pin_memory=False,
             drop_last=False,
         )

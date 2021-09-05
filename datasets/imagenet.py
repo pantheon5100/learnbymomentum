@@ -30,12 +30,12 @@ class ImageNet(BaseDataset):
             extra_t=[T.RandomApply([RandomBlur(0.1, 2.0)], p=0.5)],
         )
         t = MultiSample(aug_with_blur, n=self.aug_cfg.num_samples)
-        return ImageFolder(root=self.aug_cfg.imagenet_path + "train", transform=t)
+        return ImageFolder(root=self.dataset_dir + "train", transform=t)
 
     def ds_clf(self):
         t = base_transform()
-        return ImageFolder(root=self.aug_cfg.imagenet_path + "clf", transform=t)
+        return ImageFolder(root=self.dataset_dir + "clf", transform=t)
 
     def ds_test(self):
         t = base_transform()
-        return ImageFolder(root=self.aug_cfg.imagenet_path + "test", transform=t)
+        return ImageFolder(root=self.dataset_dir + "test", transform=t)

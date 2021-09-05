@@ -1,5 +1,5 @@
 import torch.nn as nn
-from model import get_model, get_head
+from utils.model import get_model, get_head
 from eval.sgd import eval_sgd
 from eval.knn import eval_knn
 from eval.get_data import get_data
@@ -20,11 +20,14 @@ class BaseMethod(nn.Module):
         self.eval_head = cfg.eval_head
         self.emb_size = cfg.emb
 
+        self.classfier = nn.Linear(self.out_size, cfg.extra_model_args["numclass"])
+
     def forward(self, samples):
         raise NotImplementedError
 
     def get_acc(self, ds_clf, ds_test):
         self.eval()
+        
         if self.eval_head:
             model = lambda x: self.head(self.model(x))
             out_size = self.emb_size

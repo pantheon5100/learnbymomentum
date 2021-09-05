@@ -15,12 +15,12 @@ class CIFAR100(BaseDataset):
         t = MultiSample(
             aug_transform(32, base_transform, self.aug_cfg), n=self.aug_cfg.num_samples
         )
-        return C100(root="../../../../../../data", train=True, download=True, transform=t,)
+        return C100(root=self.dataset_dir, train=True, download=True, transform=t,)
 
     def ds_clf(self):
         t = base_transform()
-        return C100(root="../../../../../../data", train=True, download=True, transform=t)
+        return C100(root=self.dataset_dir, train=True, download=True, transform=t)
 
     def ds_test(self):
         t = base_transform()
-        return C100(root="../../../../../../data", train=False, download=True, transform=t)
+        return C100(root=self.dataset_dir, train=False, download=True, transform=t)

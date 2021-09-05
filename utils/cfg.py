@@ -4,6 +4,7 @@ from torchvision import models
 import multiprocessing
 from datasets import DS_LIST
 from methods import METHOD_LIST
+from pathlib import Path
 
 
 def get_cfg():
@@ -11,12 +12,6 @@ def get_cfg():
     parser = argparse.ArgumentParser(description="")
     parser.add_argument(
         "--method", type=str, choices=METHOD_LIST, default="w_mse", help="loss type",
-    )
-    parser.add_argument(
-        "--wandb",
-        type=str,
-        default="self_supervised",
-        help="name of the project for logging at https://wandb.ai",
     )
     parser.add_argument(
         "--byol_tau", type=float, default=0.99, help="starting tau for byol loss"
@@ -149,4 +144,34 @@ def get_cfg():
         "--eval_head", action="store_true", help="eval head output instead of model",
     )
     parser.add_argument("--imagenet_path", type=str, default="~/IN100/")
-    return parser.parse_args()
+
+    # add argument
+    parser.add_argument("--gpu", type=str, default="Baseline")
+
+    parser.add_argument("--data_dir", type=Path, required=True)
+
+    parser.add_argument("--name", type=str, default="Baseline")
+    parser.add_argument("--project", type=str, default="kaistssl")
+
+
+    parser.add_argument(
+        "--optimizer",
+        type=str,
+        default="adam",
+        choices=["sgd", "adam"],
+        help="classifier for test.py",
+    )
+
+    parser.add_argument(
+        "--wandb", action="store_true", help="using wandb to log",
+    )
+
+    args = parser.parse_args()
+
+    args.extra_model_args = {}
+    args.versions = {}
+    
+    dataset_numclass = {"cifar10":10, "cifar100":100, "stl10":10, "tiny_in":100, "imagenet":1000}
+    args.extra_model_args["numclass"] = dataset_numclass[args.dataset]
+
+    return args
