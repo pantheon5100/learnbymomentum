@@ -94,7 +94,7 @@ class BYOL(BaseMethod):
         loss = byol_loss_func(p1, z2) + byol_loss_func(p2, z2_momentum) +\
                byol_loss_func(p2, z1) + byol_loss_func(p1, z1_momentum)
 
-        log_dict["loss_step"] = loss
+        log_dict["byol_loss_step"] = loss
         return loss + classfier_loss, log_dict
 
     def step(self, progress):

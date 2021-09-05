@@ -65,7 +65,7 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
 
-            loss_ep.append(loss.item())
+            loss_ep.append(log_dict["byol_loss_step"].item())
             tau = model.step(ep / cfg.epoch)
             if cfg.lr_step == "cos" and lr_warmup >= 500:
                 scheduler.step(ep + n_iter / iters)
@@ -96,7 +96,7 @@ if __name__ == "__main__":
             torch.save(model.state_dict(), fname)
 
         if cfg.wandb:
-            wandb.log({"loss": np.mean(loss_ep), "lr":current_learning_rate, "ep": ep}, step=global_step)
+            wandb.log({"byol_loss": np.mean(loss_ep), "lr":current_learning_rate, "ep": ep}, step=global_step)
 
         # print(f"EPOCH [{ep}/{cfg.epoch}]: acc_knn {acc_knn:2.2%}, acc_linear {acc[1]:2.2%}, loss {loss:2.4%}")
 
